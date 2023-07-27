@@ -17,7 +17,8 @@ func NewScheduler(
 ) {
 	// -> scheduler -> call API -> read data -> data transformation -> update Repo
 	s := gocron.NewScheduler(time.Local)
-	job, err := s.Every(5).Seconds().Tag("UpdateRate").Do(UpdateDatabase, database, svcLogger)
+	time.Sleep(10 * time.Minute)
+	job, err := s.Every(1).Hours().Tag("UpdateRate").Do(UpdateDatabase, database, svcLogger)
 
 	if err != nil {
 		svcLogger.Fatal(fmt.Sprintf("error running script: %+v", err))
