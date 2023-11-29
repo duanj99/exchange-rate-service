@@ -16,6 +16,7 @@ func NewController(
 	rateCache *repository.ExchangeRateCache,
 	database repository.ExchangeRateRepository,
 ) *ExchangeRateController {
+	dbLogger.Info("Initialize Controller")
 	return &ExchangeRateController{
 		logger:   dbLogger,
 		cache:    rateCache,
@@ -32,3 +33,9 @@ func (c *ExchangeRateController) GetRangeRates(request repository.RangeRateReque
 	c.logger.Info("read data from GetRangeRates Controller")
 	return c.database.GetRangeRates(request)
 }
+
+// root: main.go
+//	-> app.Route()
+//		-> app.getRangeRateHandler() decode request from HTTP, call controller, and encode response
+//			-> controller(): control business logic
+//				-> repository(): control data access.

@@ -26,7 +26,7 @@ func NewExchangeRateCacheRepository(
 		Stop:        make(chan bool),
 	}
 
-	go newCache.updateCachePeriodically(2 * time.Minute)
+	go newCache.updateCachePeriodically(1 * time.Minute)
 
 	return newCache
 }
@@ -36,6 +36,7 @@ func NewExchangeRateCacheRepository(
 // dirty reads/ dirty writes
 
 func (c *ExchangeRateCache) GetLatestRates() ExchangeRate {
+	c.dbLogger.Info("Someone reach Cache.GetLatestRates()")
 	return c.Rate
 }
 

@@ -7,7 +7,6 @@ import (
 	"CurrencyExchangeService/handler"
 	"CurrencyExchangeService/logger"
 	"CurrencyExchangeService/repository"
-	"CurrencyExchangeService/scheduler"
 	"flag"
 	"fmt"
 
@@ -47,7 +46,7 @@ func main() {
 		database,
 	)
 
-	scheduler.NewScheduler(database, svcLogger, false)
+	//go scheduler.NewScheduler(database, svcLogger, false)
 
 	// Declare an instance of the application struct, containing the config struct and
 	// the logger.
@@ -60,6 +59,7 @@ func main() {
 	// Declare an HTTP server with some sensible timeout settings, which listens on the
 	// port provided in the config struct and uses the servemux we created above as the
 	// handler.
+	svcLogger.Info(fmt.Sprintf("localhost:%d", cfg.Port))
 	srv := &http.Server{
 		Addr:         fmt.Sprintf("localhost:%d", cfg.Port),
 		Handler:      app.Routes(),
