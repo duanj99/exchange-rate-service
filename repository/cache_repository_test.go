@@ -31,9 +31,10 @@ func TestCacheRunning(t *testing.T) {
 		},
 	)
 
-	time.Sleep(10 * time.Second)
+	time.Sleep(3 * time.Second)
 	testCache.StopCache()
 	newRate := testCache.GetLatestRates()
 	mockLogger.Info(newRate.ToString())
-	time.Sleep(5 * time.Second)
+	//time.Sleep(5 * time.Second)
+	mockLogger.Info("reach to the end")
 }

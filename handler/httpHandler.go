@@ -51,7 +51,7 @@ func (app *Application) healthcheckHandler(w http.ResponseWriter, r *http.Reques
 // getExchangeRateHandler :Declare a handler which writes a plain-text response with information about the
 // application status, operating environment and version.
 func (app *Application) getExchangeRateHandler(w http.ResponseWriter, r *http.Request) {
-	//app.Logger.Info("Someone is calling the server.getExchangeRateHandler")
+	app.Logger.Info("Someone is calling the server.getExchangeRateHandler")
 	//var response = "{\"base_currency\": \"USD\", \"rates\": {\"CAD\": 1.3}}"
 
 	respStruct := app.Controller.GetLatestRate()
