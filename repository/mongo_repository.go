@@ -50,7 +50,7 @@ func NewMongoDBRepository(
 		mongoClient: dbClient,
 		dbLogger:    logger,
 	}
-	
+
 	// coupled
 	return mongoImpl
 }
@@ -97,6 +97,11 @@ func (db *MongoDB) GetRangeRates(
 	if err := cur.All(context.Background(), &result); err != nil {
 		db.dbLogger.Fatal(fmt.Sprintf("error GetRangeRates.DeconstructData: %s", err.Error()))
 	}
+
+	//for _, r := range result {
+	//	r.InsertTimeStamp = r.InsertTimeStamp * 1000
+	//}
+
 	return result
 
 }

@@ -68,7 +68,7 @@ func main() {
 		WriteTimeout: 10 * time.Second,
 	}
 
-	// Start the HTTP server.
+	// Start the HTTP server.a
 	svcLogger.Info(fmt.Sprintf("starting %s server on %s", cfg.Env, srv.Addr))
 	err := srv.ListenAndServe()
 	svcLogger.Fatal(err.Error())
