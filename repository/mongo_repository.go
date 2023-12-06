@@ -104,7 +104,6 @@ func (db *MongoDB) GetRangeRates(
 
 func (db *MongoDB) AddRates(rate ExchangeRate) string {
 	coll := db.getCollection()
-	//rate.InsertTimeStamp = rate.InsertTimeStamp
 	result, err := coll.InsertOne(context.Background(), rate)
 	if err != nil {
 		db.dbLogger.Fatal(fmt.Sprintf("error insert data: %s", err.Error()))
