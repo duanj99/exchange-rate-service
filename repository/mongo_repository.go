@@ -98,17 +98,13 @@ func (db *MongoDB) GetRangeRates(
 		db.dbLogger.Fatal(fmt.Sprintf("error GetRangeRates.DeconstructData: %s", err.Error()))
 	}
 
-	//for _, r := range result {
-	//	r.InsertTimeStamp = r.InsertTimeStamp * 1000
-	//}
-
 	return result
 
 }
 
 func (db *MongoDB) AddRates(rate ExchangeRate) string {
 	coll := db.getCollection()
-	rate.InsertTimeStamp = rate.InsertTimeStamp * 1000
+	//rate.InsertTimeStamp = rate.InsertTimeStamp
 	result, err := coll.InsertOne(context.Background(), rate)
 	if err != nil {
 		db.dbLogger.Fatal(fmt.Sprintf("error insert data: %s", err.Error()))

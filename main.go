@@ -7,6 +7,7 @@ import (
 	"CurrencyExchangeService/handler"
 	"CurrencyExchangeService/logger"
 	"CurrencyExchangeService/repository"
+	"CurrencyExchangeService/scheduler"
 	"flag"
 	"fmt"
 
@@ -46,7 +47,7 @@ func main() {
 		database,
 	)
 
-	//go scheduler.NewScheduler(database, svcLogger, false)
+	go scheduler.NewScheduler(database, svcLogger, false)
 
 	// Declare an instance of the application struct, containing the config struct and
 	// the logger.

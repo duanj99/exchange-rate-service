@@ -75,12 +75,6 @@ type httpRangeInput struct {
 	EndDate  string `json:"endDate"`
 }
 
-type httpRangeResponse struct {
-	BaseCurrency    string             `json:"BaseCurrency"`
-	Rates           map[string]float64 `json:"Rates"`
-	InsertTimeStamp string             `json:"InsertTimeStamp"`
-}
-
 // curl -d '{"startDate":"2023-06-01","endDate":"2023-07-22"}' -X GET http://localhost:8080/v1/rangeRate -H "Content-Type: application/json"
 func (app *Application) getRangeRateHandler(w http.ResponseWriter, r *http.Request) {
 
@@ -102,26 +96,26 @@ func (app *Application) getRangeRateHandler(w http.ResponseWriter, r *http.Reque
 	startTime, _ := time.Parse("2006-01-02", inputVar.StarDate)
 	endTime, _ := time.Parse("2006-01-02", inputVar.EndDate)
 	input := repository.RangeRateRequest{
-		StartTime: primitive.DateTime(startTime.Unix()),
-		EndTime:   primitive.DateTime(endTime.Unix()),
+		StartTime: primitive.DateTime(startTime.UnixMilli()),
+		EndTime:   primitive.DateTime(endTime.UnixMilli()),
 	}
 
 	app.Logger.Info(fmt.Sprintf("%+v", input))
 	respStruct := app.Controller.GetRangeRates(input)
 
-	var jsonResult []httpRangeResponse
-	for _, resp := range respStruct {
-		app.Logger.Info(resp.InsertTimeStamp.Time().String())
-		jr := httpRangeResponse{
-			BaseCurrency:    resp.BaseCurrency,
-			Rates:           resp.Rates,
-			InsertTimeStamp: time.Unix(int64(resp.InsertTimeStamp), 0).Format("2006-01-02"),
-		}
+	//var jsonResult []httpRangeResponse
+	//for _, resp := range respStruct {
+	//	app.Logger.Info(resp.InsertTimeStamp.Time().String())
+	//	jr := httpRangeResponse{
+	//		BaseCurrency:    resp.BaseCurrency,
+	//		Rates:           resp.Rates,
+	//		InsertTimeStamp: time.Unix(int64(resp.InsertTimeStamp), 0).Format("2006-01-02"),
+	//	}
+	//
+	//	jsonResult = append(jsonResult, jr)
+	//}
 
-		jsonResult = append(jsonResult, jr)
-	}
-
-	b, err = json.Marshal(jsonResult)
+	b, err = json.Marshal(respStruct)
 	if err != nil {
 		fmt.Printf("Error: %s", err)
 		return

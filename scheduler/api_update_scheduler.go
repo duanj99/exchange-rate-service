@@ -48,7 +48,7 @@ func UpdateDatabase(
 	exchangeRate := repository.ExchangeRate{
 		BaseCurrency:    newRates.Base,
 		Rates:           newRates.Rates,
-		InsertTimeStamp: primitive.DateTime(newRates.Timestamp),
+		InsertTimeStamp: primitive.DateTime(newRates.Timestamp * 1000),
 	}
 
 	result := database.AddRates(exchangeRate)
