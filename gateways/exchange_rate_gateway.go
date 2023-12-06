@@ -17,6 +17,10 @@ type OpenExchangeRateResponse struct {
 	Rates     map[string]float64 `json:"rates"`
 }
 
+/*
+	curl -X GET 'https://openexchangerates.org/api/latest.json?app_id=a3d29c1fdc8c4d97bc71264336f8efcd' \
+	    -H 'Content-Type: application/json'
+*/
 func GetOpenExchangeRate() (response OpenExchangeRateResponse) {
 	requestURL := "https://openexchangerates.org/api/latest.json?app_id=a3d29c1fdc8c4d97bc71264336f8efcd"
 	resp, err := http.Get(requestURL)

@@ -17,8 +17,8 @@ func NewScheduler(
 ) {
 	// -> scheduler -> call API -> read data -> data transformation -> update Repo
 	s := gocron.NewScheduler(time.Local)
-	time.Sleep(10 * time.Minute)
-	job, err := s.Every(1).Hours().Tag("UpdateRate").Do(UpdateDatabase, database, svcLogger)
+	//time.Sleep(10 * time.Minute)
+	job, err := s.Every(10).Minute().Tag("UpdateRate").Do(UpdateDatabase, database, svcLogger)
 
 	if err != nil {
 		svcLogger.Fatal(fmt.Sprintf("error running script: %+v", err))
@@ -30,7 +30,7 @@ func NewScheduler(
 		svcLogger.Info("Scheduler blocking and run ")
 		s.StartAsync()
 
-		time.Sleep(8 * time.Second)
+		time.Sleep(15 * time.Second)
 		svcLogger.Info("Shut down the Scheduler ")
 		s.Stop()
 	} else {
@@ -43,7 +43,7 @@ func UpdateDatabase(
 ) {
 	newRates := gateways.GetOpenExchangeRate()
 
-	svcLogger.Info(fmt.Sprintf("get latest rate from OpenExchange %+v", newRates))
+	svcLogger.Info(fmt.Sprintf("Scheduler, get latest rate from OpenExchange %+v", newRates))
 
 	exchangeRate := repository.ExchangeRate{
 		BaseCurrency:    newRates.Base,
