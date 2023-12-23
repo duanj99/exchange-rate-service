@@ -7,13 +7,13 @@ import (
 
 type ExchangeRateController struct {
 	logger   *logger.ServiceLogger
-	cache    *repository.ExchangeRateCache
+	cache    repository.ExchangeRateCacheRepository
 	database repository.ExchangeRateRepository
 }
 
 func NewController(
 	dbLogger *logger.ServiceLogger,
-	rateCache *repository.ExchangeRateCache,
+	rateCache repository.ExchangeRateCacheRepository,
 	database repository.ExchangeRateRepository,
 ) *ExchangeRateController {
 	dbLogger.Info("Initialize Controller")
@@ -26,7 +26,15 @@ func NewController(
 
 func (c *ExchangeRateController) GetLatestRate() repository.ExchangeRate {
 	c.logger.Info("read data from GetLatestRate Controller")
-	return c.cache.GetLatestRates()
+
+	result, err := c.cache.GetLatestRates()
+
+	// Return a default Value if error
+	if err != nil {
+		result = c.database.GetLatestRates()
+	}
+
+	return result
 }
 
 func (c *ExchangeRateController) GetRangeRates(request repository.RangeRateRequest) []repository.ExchangeRate {

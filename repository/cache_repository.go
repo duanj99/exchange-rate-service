@@ -2,6 +2,7 @@ package repository
 
 import (
 	"CurrencyExchangeService/logger"
+	"errors"
 	"sync"
 	"time"
 )
@@ -15,10 +16,17 @@ type ExchangeRateCache struct {
 	mu   sync.RWMutex //A RWMutex is a reader/writer mutual exclusion lock.
 }
 
+// ExchangeRateCacheRepository - Abstract Interface
+type ExchangeRateCacheRepository interface {
+	GetLatestRates() (ExchangeRate, error)
+	AddRates(ExchangeRate) string
+	StopCache()
+}
+
 func NewExchangeRateCacheRepository(
 	logger *logger.ServiceLogger,
 	mongoDBRepo ExchangeRateRepository,
-) *ExchangeRateCache {
+) ExchangeRateCacheRepository {
 	newCache := &ExchangeRateCache{
 		Rate:        mongoDBRepo.GetLatestRates(),
 		mongoDBRepo: mongoDBRepo,
@@ -35,17 +43,22 @@ func NewExchangeRateCacheRepository(
 // database write read lock
 // dirty reads/ dirty writes
 
-func (c *ExchangeRateCache) GetLatestRates() ExchangeRate {
+func (c *ExchangeRateCache) GetLatestRates() (er ExchangeRate, err error) {
 	c.dbLogger.Info("Someone reach Cache.GetLatestRates()")
-	return c.Rate
+	er = c.Rate
+	if c.Rate.BaseCurrency != "USD" {
+		return c.Rate, errors.New("cache is Empty")
+	}
+
+	return c.Rate, nil
 }
 
-func (c *ExchangeRateCache) AddRates(input ExchangeRate) interface{} {
+func (c *ExchangeRateCache) AddRates(input ExchangeRate) string {
 	c.mu.Lock()
 	defer c.mu.Unlock()
 	c.dbLogger.Info("Refresh Data in Cache")
 	c.Rate = input
-	return c.Rate
+	return c.Rate.ToString()
 }
 
 func (c *ExchangeRateCache) updateCachePeriodically(interval time.Duration) {

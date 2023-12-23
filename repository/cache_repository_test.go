@@ -20,7 +20,7 @@ func TestCacheRunning(t *testing.T) {
 	)
 
 	// action
-	rate := testCache.GetLatestRates()
+	rate, _ := testCache.GetLatestRates()
 	mockLogger.Info(rate.ToString())
 
 	mockRepository.AddRates(
@@ -32,8 +32,8 @@ func TestCacheRunning(t *testing.T) {
 	)
 
 	time.Sleep(3 * time.Second)
-	testCache.StopCache()
-	newRate := testCache.GetLatestRates()
+	//testCache.StopCache()
+	newRate, _ := testCache.GetLatestRates()
 	mockLogger.Info(newRate.ToString())
 	//time.Sleep(5 * time.Second)
 	mockLogger.Info("reach to the end")
