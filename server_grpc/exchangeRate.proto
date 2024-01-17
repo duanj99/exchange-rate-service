@@ -1,0 +1,41 @@
+syntax = "proto3";
+
+package exchangeRate.v1;
+
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/duanj99/exchange-rate-service/server_grpc";
+
+// The greeting service definition.
+service exchangeRateService {
+	// Sends a greeting
+	rpc getLatestRate (GetLatestRateRequest) returns (GetLatestRateResponse) {}
+	rpc getRangeRate (GetRangeRateRequest) returns (GetRangeRateResponse) {}
+}
+
+
+message GetLatestRateRequest {
+}
+
+
+message ExchangeRate {
+	string base_currency = 1;
+	map<string, double> rates = 2;
+	google.protobuf.Timestamp time = 3;
+}
+
+message GetLatestRateResponse {
+	ExchangeRate rate = 1;
+}
+
+message GetRangeRateRequest {
+	string startDate = 1;
+	string endDate = 2;
+}
+
+
+message GetRangeRateResponse {
+	repeated ExchangeRate rates = 1;
+}
+
+
