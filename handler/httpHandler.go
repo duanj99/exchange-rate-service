@@ -12,6 +12,7 @@ import (
 	"io"
 	"net/http"
 	"time"
+	"unsafe"
 )
 
 // Application Define an application struct to hold the dependencies for our HTTP handlers, helpers,
@@ -116,6 +117,7 @@ func (app *Application) getRangeRateHandler(w http.ResponseWriter, r *http.Reque
 	//}
 
 	b, err = json.Marshal(respStruct)
+	app.Logger.Info(fmt.Sprintf("the respHttp Data: %s, Size: %d", b, unsafe.Sizeof(b)))
 	if err != nil {
 		fmt.Printf("Error: %s", err)
 		return

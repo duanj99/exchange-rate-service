@@ -7,10 +7,8 @@ import (
 	"CurrencyExchangeService/handler"
 	"CurrencyExchangeService/logger"
 	"CurrencyExchangeService/repository"
-	"CurrencyExchangeService/scheduler"
 	"flag"
 	"fmt"
-
 	"net/http"
 
 	"time"
@@ -47,7 +45,10 @@ func main() {
 		database,
 	)
 
-	go scheduler.NewScheduler(database, svcLogger, false)
+	//go scheduler.NewScheduler(database, svcLogger, false)
+	// Start the gRPC Server
+	svcLogger.Info(fmt.Sprintf("starting gRPC %s server on %s", cfg.Env, "8081"))
+	go handler.InitGRPCHandler(svcLogger, svcController)
 
 	// Declare an instance of the application struct, containing the config struct and
 	// the logger.
